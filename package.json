@@ -19,5 +19,6 @@
     "gulp-minify": "^2.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.2.1",
+    "gulp-uglify": "^3.0.2"
   }
 }

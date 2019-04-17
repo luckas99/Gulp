@@ -4,6 +4,7 @@ let browsersync = require('browser-sync');
 let clean = require('gulp-clean-css');
 let concat = require('gulp-concat');
 let compressimages = require('compress-images');
+let uglify = require('gulp-uglify');
 
 
 gulp.task('sass', function () {
@@ -11,11 +12,11 @@ gulp.task('sass', function () {
         .pipe(sass().on('error', sass.logError))
         .pipe(concat('style.min.css'))
         .pipe(clean())
-        .pipe(gulp.dest('./css'));
+        .pipe(gulp.dest('./dist/css'));
 });
 
 gulp.task('compress_images', function () {
-    compressimages('./build/images/*.{jpg,JPG,jpeg,JPEG,png,svg,gif}', './assets/', {
+    compressimages('./build/images/*.{jpg,JPG,jpeg,JPEG,png,svg,gif}', './dist/assets/', {
             compress_force: false,
             statistic: true,
             autoupdate: true
@@ -38,6 +39,16 @@ gulp.task('browser-sync', function () {
         },
         watch: ['./*']
     });
+});
+
+
+// Make js uglify
+gulp.task('scripts', function () {
+    return gulp.src('./build/js/**/*.js')
+    // Minify the file
+        .pipe(uglify())
+        // Output
+        .pipe(gulp.dest('./dist/js'))
 });
 
 
