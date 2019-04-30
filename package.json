@@ -1,5 +1,5 @@
 {
-  "name": "due-new",
+  "name": "LP",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,9 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "gulp": "gulp"
   },
-  "author": "",
+  "author": "Lucas Schnr",
   "license": "ISC",
   "devDependencies": {
+    "bootstrap": "^4.3.1",
     "browser-sync": "^2.23.6",
     "compress-images": "^1.4.6",
     "gulp": "^3.9.1",
