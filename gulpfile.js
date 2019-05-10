@@ -15,22 +15,37 @@ gulp.task('sass', function () {
         .pipe(gulp.dest('./dist/css'));
 });
 
-gulp.task('compress_images', function () {
+gulp.task('compress-images', function () {
     compressimages('./build/images/*.{jpg,JPG,jpeg,JPEG,png,svg,gif}', './dist/assets/', {
-            compress_force: false,
-            statistic: true,
-            autoupdate: true
-        }, false,
-        {jpg: {engine: 'jpegRecompress', command: ['--quality', 'high', '--min', '60']}},
-        {png: {engine: 'pngquant', command: ['--quality=20-50']}},
-        {svg: {engine: 'svgo', command: '--multipass'}},
-        {gif: {engine: 'gifsicle', command: ['--colors', '64', '--use-col=web']}}, function (err) {
-            if (err !== null) {
-                console.log("Use another config for compression!");
-            }
-        });
+        compress_force: false,
+        statistic: true,
+        autoupdate: true
+    }, false, {
+        jpg: {
+            engine: 'jpegRecompress',
+            command: ['--quality', 'high', '--min', '60']
+        }
+    }, {
+        png: {
+            engine: 'pngquant',
+            command: ['--quality=20-50']
+        }
+    }, {
+        svg: {
+            engine: 'svgo',
+            command: '--multipass'
+        }
+    }, {
+        gif: {
+            engine: 'gifsicle',
+            command: ['--colors', '64', '--use-col=web']
+        }
+    }, function (err) {
+        if (err !== null) {
+            console.log("Use another config for compression!");
+        }
+    });
 });
-
 
 gulp.task('browser-sync', function () {
     browsersync.init({
@@ -42,25 +57,23 @@ gulp.task('browser-sync', function () {
 });
 
 
-// Make js uglify
-gulp.task('scripts', function () {
+gulp.task('js', function () {
     return gulp.src('./build/js/**/*.js')
-    // Minify the file
         .pipe(uglify())
-        // Output
         .pipe(gulp.dest('./dist/js'))
 });
 
 
 gulp.task('default', function (event) {
-    gulp.run('sass', 'browser-sync', 'compress_images');
 
-    gulp.watch(['./build/scss/**/*.scss'], function () {
-        gulp.run('sass');
-    });
+    gulp.start('sass', 'browser-sync', 'js');
 
-    gulp.watch(['./build/images/**/*.{jpg,JPG,jpeg,JPEG,png,svg,gif}'], function () {
-        gulp.run('compress_images');
-    });
+    gulp.watch('./build/scss/**/*.scss', () => gulp.start('sass'));
 
+    gulp.watch('./build/js/**/*.js', () => gulp.start('js'));
+
+    gulp.watch(['build/images/*.{jpg,JPG,jpeg,JPEG,png,svg,gif}'])
+        .on('change', () => gulp.start('compress-images'));
 });
+
+// Check qualitity before compression
